@@ -17,8 +17,8 @@ from yaml.constructor import ConstructorError
 from yaml.parser import ParserError
 
 md_iid = "3.0"
-md_version = "1.9.0"
-md_name = "Obsidian"
+md_version = "1.9.1"
+md_name = "Obsidian Python"
 md_description = "Search/add notes in a Obsidian vault."
 md_url = "https://github.com/Pete-Hamlin/albert-obsidian.git"
 md_license = "MIT"
@@ -53,9 +53,7 @@ class FileWatcherThread(Thread):
 
     def run(self):
         # Watch for file changes and re-index
-        for _ in watch(
-            self.__path, watch_filter=CDFilter(), stop_event=self.__stop_event
-        ):
+        for _ in watch(self.__path, watch_filter=CDFilter(), stop_event=self.__stop_event):
             self.__callback()
 
     def stop(self):
@@ -170,11 +168,7 @@ class Plugin(PluginInstance, IndexQueryHandler):
             item = self.gen_item(note)
             index_items.append(IndexItem(item=item, string=filter))
         self.setIndexItems(index_items)
-        info(
-            "Indexed {} notes [{:d} ms]".format(
-                len(index_items), (int(perf_counter_ns() - start) // 1000000)
-            )
-        )
+        info("Indexed {} notes [{:d} ms]".format(len(index_items), (int(perf_counter_ns() - start) // 1000000)))
 
     def handleTriggerQuery(self, query):
         # Trigger query will ignore the index and always check against the latest vault state
@@ -184,17 +178,10 @@ class Plugin(PluginInstance, IndexQueryHandler):
                 return
             data = self.parse_notes()
             notes = (
-                item
-                for item in data
-                if all(
-                    filter in self.create_filters(item)
-                    for filter in query.string.split()
-                )
+                item for item in data if all(filter in self.create_filters(item) for filter in query.string.split())
             )
             items = [self.gen_item(item) for item in notes]
-            text = parse.urlencode(
-                {"vault": self.root_path.name, "name": stripped}, quote_via=parse.quote
-            )
+            text = parse.urlencode({"vault": self.root_path.name, "name": stripped}, quote_via=parse.quote)
             run_args = self._open_override.split() + [f"obsidian://new?{text}"]
             query.add(items)
             query.add(
@@ -224,9 +211,7 @@ class Plugin(PluginInstance, IndexQueryHandler):
 
     def createFallbackItem(self, q: str) -> Item:
         stripped = q.strip()
-        text = parse.urlencode(
-            {"vault": self.root_path.name, "name": stripped}, quote_via=parse.quote
-        )
+        text = parse.urlencode({"vault": self.root_path.name, "name": stripped}, quote_via=parse.quote)
         run_args = self._open_override.split() + [f"obsidian://new?{text}"]
         return StandardItem(
             id=self.id(),
@@ -235,7 +220,7 @@ class Plugin(PluginInstance, IndexQueryHandler):
             iconUrls=["xdg:accessories-text-editor"],
             actions=[
                 Action("create", "Create note", lambda args=run_args: runDetachedProcess(args)),
-            ]
+            ],
         )
 
     def parse_notes(self):
@@ -289,6 +274,7 @@ class Plugin(PluginInstance, IndexQueryHandler):
             ],
         )
 
+
 class FBH(FallbackHandler):
 
     def __init__(self, p: Plugin):
@@ -304,5 +290,5 @@ class FBH(FallbackHandler):
     def description(self):
         return md_description
 
-    def fallbacks(self, q :str):
+    def fallbacks(self, q: str):
         return [self.plugin.createFallbackItem(q)]
