@@ -15,6 +15,7 @@ from albert import *
 from watchfiles import Change, DefaultFilter, watch
 from yaml.constructor import ConstructorError
 from yaml.parser import ParserError
+from yaml.reader import ReaderError
 
 md_iid = "3.0"
 md_version = "1.9.1"
@@ -227,6 +228,9 @@ class Plugin(PluginInstance, IndexQueryHandler):
         for item in self.root_path.rglob("*.md"):
             try:
                 body = frontmatter.load(item)
+            except ReaderError:
+                warning(f"YAML parser found invalid characters in file: {ascii(item.name)} - skipping")
+                continue
             except (ConstructorError, ParserError):
                 # If the frontmatter is unparsable (e.g. template, just skip it)
                 warning(f"Unable to parse {item.name} - skipping")
