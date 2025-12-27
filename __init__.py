@@ -17,13 +17,14 @@ from yaml.constructor import ConstructorError
 from yaml.parser import ParserError
 from yaml.reader import ReaderError
 
-md_iid = "3.0"
-md_version = "1.9.1"
+md_iid = "4.0"
+md_version = "1.10.0"
 md_name = "Obsidian Python"
 md_description = "Search/add notes in a Obsidian vault."
 md_url = "https://github.com/Pete-Hamlin/albert-obsidian.git"
 md_license = "MIT"
 md_authors = ["@Pete-Hamlin"]
+md_maintainers = ["@Pete-Hamlin"]
 md_lib_dependencies = ["python-frontmatter", "watchfiles"]
 
 
@@ -62,10 +63,7 @@ class FileWatcherThread(Thread):
 
 
 class Plugin(PluginInstance, IndexQueryHandler):
-    iconUrls = [
-        f"file:{Path(__file__).parent}/obsidian.png",
-        "xdg:folder-documents",
-    ]
+    logo_icon = Path(__file__).parent / "obsidian.png"
 
     def __init__(self):
         PluginInstance.__init__(self)
@@ -190,7 +188,7 @@ class Plugin(PluginInstance, IndexQueryHandler):
                     id=str(self.id),
                     text="Create new Note",
                     subtext=f"{str(self.root_path)}/{stripped}",
-                    iconUrls=["xdg:accessories-text-editor"],
+                    icon_factory=lambda: makeThemeIcon("xdg:accessories-text-editor"),
                     actions=[
                         Action(
                             "create",
@@ -206,7 +204,7 @@ class Plugin(PluginInstance, IndexQueryHandler):
                     id=str(self.id),
                     text="Obsidian",
                     subtext="Search for a note in Obsidian vault",
-                    iconUrls=self.iconUrls,
+                    icon_factory=lambda: makeImageIcon(self.logo_icon),
                 )
             )
 
@@ -218,7 +216,7 @@ class Plugin(PluginInstance, IndexQueryHandler):
             id=self.id(),
             text=self.name(),
             subtext="Create note titled '{}' in obsidian".format(q),
-            iconUrls=["xdg:accessories-text-editor"],
+            icon_factory=lambda: makeThemeIcon("xdg:accessories-text-editor"),
             actions=[
                 Action("create", "Create note", lambda args=run_args: runDetachedProcess(args)),
             ],
@@ -267,7 +265,7 @@ class Plugin(PluginInstance, IndexQueryHandler):
             id=str(self.id),
             text=note.path.name.replace(".md", ""),
             subtext=subtext,
-            iconUrls=self.iconUrls,
+            icon_factory=lambda: makeImageIcon(self.logo_icon),
             actions=[
                 Action(
                     "open",
