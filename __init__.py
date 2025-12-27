@@ -81,6 +81,14 @@ class Plugin(PluginInstance, IndexQueryHandler):
         self.thread = FileWatcherThread(self.updateIndexItems, self._root_dir)
         self.thread.start()
 
+    def synopsis(self, _) -> str:
+        filters = [
+            filter
+            for filter in ["name", "tags" if self.filter_by_tags else None, "body" if self.filter_by_body else None]
+            if filter is not None
+        ]
+        return "<note {}>".format("|".join(filters))
+
     def __del__(self):
         self.thread.stop()
         self.thread.join()
@@ -278,7 +286,6 @@ class Plugin(PluginInstance, IndexQueryHandler):
 
 
 class FBH(FallbackHandler):
-
     def __init__(self, p: Plugin):
         FallbackHandler.__init__(self)
         self.plugin = p
