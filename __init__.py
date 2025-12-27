@@ -196,7 +196,7 @@ class Plugin(PluginInstance, IndexQueryHandler):
                     id=str(self.id),
                     text="Create new Note",
                     subtext=f"{str(self.root_path)}/{stripped}",
-                    icon_factory=lambda: makeThemeIcon("xdg:accessories-text-editor"),
+                    icon_factory=lambda: makeThemeIcon("accessories-text-editor"),
                     actions=[
                         Action(
                             "create",
@@ -224,7 +224,7 @@ class Plugin(PluginInstance, IndexQueryHandler):
             id=self.id(),
             text=self.name(),
             subtext="Create note titled '{}' in obsidian".format(q),
-            icon_factory=lambda: makeThemeIcon("xdg:accessories-text-editor"),
+            icon_factory=lambda: makeThemeIcon("accessories-text-editor"),
             actions=[
                 Action("create", "Create note", lambda args=run_args: runDetachedProcess(args)),
             ],
