@@ -1,4 +1,28 @@
 
+<a name="1.10.0"></a>
+## [1.10.0] - 2025-12-27
+### Chore
+- Fix typo
+- Update to extension API 4.0
+- Update extension name to reflect new cpp extension
+
+### Feat
+- Add synopsis
+
+
+<a name="1.9.1"></a>
+## [1.9.1] - 2025-10-06
+### Chore
+- Added basic changelog config & generate changelog
+
+### Doc
+- Update README
+- Fix CHANGELOG formatting
+
+### Fix
+- Handled invalid characters in YAML parser
+
+
 <a name="1.9.0"></a>
 ## [1.9.0] - 2025-06-22
 ### Chore
@@ -105,7 +129,9 @@
 - version 0.1
 
 
-[Unreleased]: https://github.com/Pete-Hamlin/albert-obsidian/compare/1.9.0...HEAD
+[Unreleased]: https://github.com/Pete-Hamlin/albert-obsidian/compare/1.10.0...HEAD
+[1.10.0]: https://github.com/Pete-Hamlin/albert-obsidian/compare/1.9.1...1.10.0
+[1.9.1]: https://github.com/Pete-Hamlin/albert-obsidian/compare/1.9.0...1.9.1
 [1.9.0]: https://github.com/Pete-Hamlin/albert-obsidian/compare/1.8.0...1.9.0
 [1.8.0]: https://github.com/Pete-Hamlin/albert-obsidian/compare/1.7.0...1.8.0
 [1.7.0]: https://github.com/Pete-Hamlin/albert-obsidian/compare/1.6.0...1.7.0
