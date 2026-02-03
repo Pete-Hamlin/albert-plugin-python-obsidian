@@ -17,8 +17,8 @@ from yaml.constructor import ConstructorError
 from yaml.parser import ParserError
 from yaml.reader import ReaderError
 
-md_iid = "4.0"
-md_version = "1.10.0"
+md_iid = "5.0"
+md_version = "1.11.0"
 md_name = "Obsidian Python"
 md_description = "Search/add notes in a Obsidian vault."
 md_url = "https://github.com/Pete-Hamlin/albert-obsidian.git"
@@ -80,6 +80,10 @@ class Plugin(PluginInstance, IndexQueryHandler):
         self.root_path = Path(self._root_dir)
         self.thread = FileWatcherThread(self.updateIndexItems, self._root_dir)
         self.thread.start()
+
+    @staticmethod
+    def makeIcon():
+        return Icon.composed(Icon.image(Path(__file__).parent / "obsidian.png"), Icon.grapheme("🗒️"))
 
     def synopsis(self, _) -> str:
         filters = [
@@ -196,7 +200,7 @@ class Plugin(PluginInstance, IndexQueryHandler):
                     id=str(self.id),
                     text="Create new Note",
                     subtext=f"{str(self.root_path)}/{stripped}",
-                    icon_factory=lambda: makeThemeIcon("accessories-text-editor"),
+                    icon_factory=Plugin.makeIcon,
                     actions=[
                         Action(
                             "create",
@@ -212,7 +216,7 @@ class Plugin(PluginInstance, IndexQueryHandler):
                     id=str(self.id),
                     text="Obsidian",
                     subtext="Search for a note in Obsidian vault",
-                    icon_factory=lambda: makeImageIcon(self.logo_icon),
+                    icon_factory=Plugin.makeIcon,
                 )
             )
 
@@ -224,7 +228,7 @@ class Plugin(PluginInstance, IndexQueryHandler):
             id=self.id(),
             text=self.name(),
             subtext="Create note titled '{}' in obsidian".format(q),
-            icon_factory=lambda: makeThemeIcon("accessories-text-editor"),
+            icon_factory=Plugin.makeIcon,
             actions=[
                 Action("create", "Create note", lambda args=run_args: runDetachedProcess(args)),
             ],
@@ -273,7 +277,7 @@ class Plugin(PluginInstance, IndexQueryHandler):
             id=str(self.id),
             text=note.path.name.replace(".md", ""),
             subtext=subtext,
-            icon_factory=lambda: makeImageIcon(self.logo_icon),
+            icon_factory=Plugin.makeIcon,
             actions=[
                 Action(
                     "open",
